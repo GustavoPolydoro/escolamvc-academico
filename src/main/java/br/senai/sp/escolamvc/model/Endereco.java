@@ -1,23 +1,34 @@
 package br.senai.sp.escolamvc.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Endereco {
+
+    /*Cara esses private string faz parte da tabela de endereco no banco de dados
+    * eles são os campos da tabela*/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique=true)
     private Long id;
     private String cep;
     private String logradouro;
-    private Integer numero;
     private String complemento;
     private String bairro;
-    private String cidade;
+    private String localidade;
     private String uf;
-
+    private String ibge;
+    private String gia;
+    private String siafi;
 
     public Long getId() {
         return id;
@@ -43,14 +54,6 @@ public class Endereco {
         this.logradouro = logradouro;
     }
 
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
-
     public String getComplemento() {
         return complemento;
     }
@@ -67,12 +70,12 @@ public class Endereco {
         this.bairro = bairro;
     }
 
-    public String getCidade() {
-        return cidade;
+    public String getLocalidade() {
+        return localidade;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
     }
 
     public String getUf() {
@@ -81,5 +84,29 @@ public class Endereco {
 
     public void setUf(String uf) {
         this.uf = uf;
+    }
+
+    public String getIbge() {
+        return ibge;
+    }
+
+    public void setIbge(String ibge) {
+        this.ibge = ibge;
+    }
+
+    public String getGia() {
+        return gia;
+    }
+
+    public void setGia(String gia) {
+        this.gia = gia;
+    }
+
+    public String getSiafi() {
+        return siafi;
+    }
+
+    public void setSiafi(String siafi) {
+        this.siafi = siafi;
     }
 }

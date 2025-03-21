@@ -1,64 +1,257 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Fragmento de código que será substituído pelo conteúdo do fragmento "heads" -->
     <div th:replace="fragments/heads :: heads"></div>
-    <title>Alterar Aluno</title>
+
+    <!-- Título da página -->
+    <title>Adicionar Aluno</title>
+
+    <!-- Estilo CSS para mensagens de erro -->
+    <style>
+        .mensagem {
+            color: red;
+        }
+    </style>
 </head>
 <body>
+
 <div class="container">
+    <!-- Fragmento de código que será substituído pelo conteúdo do fragmento "cabecalho" -->
     <div th:replace="fragments/header :: cabecalho"></div>
-    <h1>Alterar Aluno</h1>
+    <div class="row">
+        <div class="col">
 
-    <form action="#" th:action="@{/professor/alterar/{id}(id=${professor.id})}" th:object="${professor}" method="post">
-
-        <input type="hidden" th:field="*{id}"/>
-
-        <div class="row mb-3">
-            <label class="col-sm-1 col-form-label">Nome:</label>
-            <div class="col-sm-5">
-                <input class="form-control" type="text" th:field="*{nome}">
+            <!-- Mensagem de sucesso que será exibida após a inserção dos dados -->
+            <div class="alert alert-success alert-dismissible fade show" th:if="${mensagem}">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <span th:text="${mensagem}"></span>
             </div>
-            <div class="col-sm-5">
-                <span class="mensagem" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
+
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Alterar <b>Professores</b></h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="col-sm-12" style="text-align: right;">
+                                <!-- Botão para redirecionar para a listagem de professores -->
+                                <a th:href="@{/professor}" class="btn btn-primary"> Listagem <i class="fas fa-list"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <!-- Formulário para cadastro de professores -->
+                <form action="#" th:action="@{/professor/salvar}" th:object="${professor}" method="post">
+
+                    <!-- Campo oculto para o ID do professor -->
+                    <input type="hidden" th:field="*{id}">
+
+                    <!-- Seção de Dados Pessoais -->
+                    <div class="card">
+                        <div class="card-header">
+                            Dados Pessoais
+                        </div>
+
+                        <div class="card-body">
+                            <!-- Campo para o nome do professor -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">Nome:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" th:field="*{nome}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo nome -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Campo para o CPF do professor -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">CPF:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control cpf" type="text" th:field="*{cpf}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo CPF -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Campo para o email do professor -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">Email:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" th:field="*{email}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo email -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- Seção de Dados de Endereço -->
+                    <div class="card">
+                        <div class="card-header">
+                            Dados de Endereço
+                        </div>
+
+                        <div class="card-body">
+                            <!-- Campo para o CEP do endereço -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">Cep:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="cep" th:field="*{endereco.cep}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo CEP -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('endereco.cep')}" th:errors="*{endereco.cep}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Campo para o logradouro do endereço -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">Logradouro:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="rua" th:field="*{endereco.logradouro}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo logradouro -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('endereco.logradouro')}" th:errors="*{endereco.logradouro}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Campo para o complemento do endereço -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">Complemento:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" th:field="*{endereco.complemento}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo complemento -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('endereco.complemento')}" th:errors="*{endereco.complemento}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Campo para o bairro do endereço -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">Bairro:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="bairro" th:field="*{endereco.bairro}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo bairro -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('endereco.bairro')}" th:errors="*{endereco.bairro}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Campo para a cidade do endereço -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">Cidade:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="cidade" th:field="*{endereco.localidade}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo cidade -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('endereco.localidade')}" th:errors="*{endereco.localidade}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Campo para a UF do endereço -->
+                            <div class="form-control form-control-sm">
+                                <label class="col-sm-12 col-form-label">UF:</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="uf" th:field="*{endereco.uf}">
+                                    <br>
+                                </div>
+                                <div class="col-sm-12">
+                                    <!-- Mensagem de erro para o campo UF -->
+                                    <span class="mensagem" th:if="${#fields.hasErrors('endereco.uf')}" th:errors="*{endereco.uf}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- Seção de Telefones -->
+                    <div class="card">
+                        <div class="card-header dynamic-update-rows">
+                            <i class="fas fa-phone"></i> Telefones
+
+                            <!-- Botão para adicionar novo telefone -->
+                            <button type="button" name="addContact" class="btn btn-sm btn-success" data-dynamic-update-rows-url="/professor/addTelefone">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <div class="card-body">
+                            <!-- Tabela para listar os telefones do professor -->
+                            <table class="table dynamic-update-rows" style="width: 100%">
+                                <tbody id="dynamicTableContents">
+                                <!-- Iteração sobre os telefones do professor -->
+                                <tr th:fragment="telefones" th:each="telefone,rowStat : ${professor.telefones}">
+                                    <td th:text="${rowStat.count}">
+                                        <!-- Campo oculto para o ID do telefone -->
+                                        <input type="hidden" th:field="${professor.telefones[__${rowStat.index}__].id}">
+                                        1
+                                    </td>
+
+                                    <!-- Campo para o DDD do telefone -->
+                                    <td>
+                                        <input class="form-control form-control-sm" type="text" placeholder="DDD" th:field="${professor.telefones[__${rowStat.index}__].DDD}" />
+                                    </td>
+
+                                    <!-- Campo para o número do telefone -->
+                                    <td>
+                                        <input class="form-control form-control-sm telefone" type="text" placeholder="Número" onkeypress="$(this).mask('00000-0000')" th:field="${professor.telefones[__${rowStat.index}__].numero}"/>
+                                    </td>
+
+                                    <!-- Botão para remover o telefone -->
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" name="removeDynamicRow" th:value="${rowStat.index}" class="btn btn-sm btn-danger" data-dynamic-update-rows-url="/professor/removeTelefone">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <!-- Botões de ação -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- Botão para salvar o formulário -->
+                            <button class="btn btn-success" type="submit"> Salvar <i class="fas fa-save"></i></button>
+                        </div>
+                        <div class="col-sm-6" style="text-align: right;">
+                            <!-- Botão para redirecionar para a listagem de professores -->
+                            <a th:href="@{/professor}" class="btn btn-primary"> Listagem <i class="fas fa-save"></i></a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="row mb-3">
-            <label class="col-sm-1 col-form-label">CPF:</label>
-            <div class="col-sm-5">
-                <input class="form-control" type="text" th:field="*{cpf}">
-            </div>
-            <div class="col-sm-5">
-                <span class="mensagem" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></span>
-            </div>
-        </div>
 
-
-
-        <div class="row mb-3">
-            <label class="col-sm-1 col-form-label">Email:</label>
-            <div class="col-sm-2">
-                <input class="form-control" type="text" th:field="*{email}">
-            </div>
-            <div class="col-sm-5">
-                <span class="mensagem" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <label class="col-sm-1 col-form-label">Data de Nascimento:</label>
-            <div class="col-sm-2">
-                <input class="form-control" type="text" th:field="*{dataNascimento}">
-            </div>
-            <div class="col-sm-5">
-                <span class="mensagem" th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></span>
-            </div>
-        </div>
-
-        <input class="btn btn-primary" type="submit" value="Gravar"/>
-    </form>
-
-    <div th:replace="fragments/footer :: footer">
+        <!-- Fragmento de código que será substituído pelo conteúdo do fragmento "footer" -->
+        <div th:replace="fragments/footer :: footer"></div>
     </div>
 </div>
 </body>

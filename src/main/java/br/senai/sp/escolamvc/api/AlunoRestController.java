@@ -2,76 +2,77 @@ package br.senai.sp.escolamvc.api;
 
 import br.senai.sp.escolamvc.model.Aluno;
 import br.senai.sp.escolamvc.repository.AlunoRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.batch.BatchTransactionManager;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/aluno")
-
-
 public class AlunoRestController {
+
     @Autowired
     private AlunoRepository alunoRepository;
 
-    //Lista os alunos do banco de dados em um arquivo json
     @GetMapping("/listar")
-    public List<Aluno> listar() {
+    public List<Aluno> listar(){
         return alunoRepository.findAll();
     }
 
-    //Insere alguem pelos campos, sem o id pq não precisa
-
     @PostMapping("/inserir")
-    public Aluno inserir(@RequestBody Aluno aluno) {
-        return alunoRepository.save(aluno);
+    public void inserir(@RequestBody Aluno aluno){
+        alunoRepository.save(aluno);
     }
-
-    //altera os dados de um aluno a partir do id dele, no json tem q colocar os campos e os valores
 
     @PutMapping("/alterar")
-    public Aluno alterar(@RequestBody Aluno aluno) {
-        return alunoRepository.save(aluno);
+    public void alterar(@RequestBody Aluno aluno){
+        alunoRepository.save(aluno);
     }
 
-    //Deleta um aluno pelo id, tem q colocar o id dele no json
-
-    @DeleteMapping("/delete")
-    public void delete(@RequestBody Aluno aluno) {
-        alunoRepository.delete(aluno);
+    @DeleteMapping("/excluir/{id}")
+    public void excluir(@PathVariable Long id){
+        alunoRepository.deleteById(id);
     }
 
-    //Inserir vários, com um array json
+    //Inserir Vários
     @PostMapping("/inserir-varios")
-    public void inserirVarios(@RequestBody List<Aluno>  aluno) {
-        alunoRepository.saveAll(aluno);
+    public void inserirVarios(@RequestBody List<Aluno> alunos){
+        alunoRepository.saveAll(alunos);
     }
 
-    //Buscar por id
+    // Buscar por Id
     @GetMapping("/buscar/{id}")
-    public Aluno buscarPorId(@PathVariable Long id) {
+    public Aluno buscarPorId(@PathVariable Long id){
         return alunoRepository.findById(id).get();
     }
 
-    //buscar por nome
+
+    //Buscar por Nome
     @GetMapping("/buscar-por-nome/{nome}")
-    public List<Aluno> buscarPorNome(@PathVariable String nome) {
+    public List<Aluno> buscarPorNome(@PathVariable String nome){
         return alunoRepository.findAlunosByNomeContaining(nome);
     }
 
-    //buscar por cpf
+    //Buscar por CPF
     @GetMapping("/buscar-por-cpf/{cpf}")
-    public Aluno buscarPorCpf(@PathVariable String cpf) {
-        return alunoRepository.findAlunosBycpf(cpf);
+    public Aluno buscarPorCpf(@PathVariable String cpf){
+        return alunoRepository.findAlunoByCpf(cpf);
     }
 
-    //Buscar por nome ou cpf
+    //Buscar por Nome ou CPF
     @GetMapping("/buscar-por-nome-ou-cpf/{nome}/{cpf}")
-    public List<Aluno> buscarPorNomeOuCpf(@PathVariable String nome, @PathVariable String cpf) {
-        return alunoRepository.findAlunosByNomeContainsOrCpfContaining(nome, cpf);
+    public List<Aluno> buscarPorNomeOuCpf(
+            @PathVariable String nome,
+            @PathVariable String cpf
+    ){
+        return alunoRepository
+                .findAlunosByNomeContainingOrCpfContaining(nome, cpf);
     }
+
+
 
 
 }

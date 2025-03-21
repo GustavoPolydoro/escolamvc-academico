@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Fragmento de código que será substituído pelo conteúdo do fragmento "heads" -->
+  <div th:replace="fragments/heads :: heads"></div>
+
+  <!-- Título da página -->
+  <title>Adicionar Aluno</title>
+
+  <!-- Estilo CSS para mensagens de erro -->
+  <style>
+    .mensagem {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Fragmento de código que será substituído pelo conteúdo do fragmento "cabecalho" -->
+  <div th:replace="fragments/header :: cabecalho"></div>
+  <div class="row">
+    <div class="col">
+
+      <!-- Mensagem de sucesso que será exibida após a inserção dos dados -->
+      <div class="alert alert-success alert-dismissible fade show" th:if="${mensagem}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <span th:text="${mensagem}"></span>
+      </div>
+
+      <div class="table-wrapper">
+        <div class="table-title">
+          <div class="row">
+            <div class="col-sm-6">
+              <h2>Cadastro de <b>Turmas</b></h2>
+            </div>
+            <div class="col-sm-6">
+              <div class="col-sm-12" style="text-align: right;">
+                <!-- Botão para redirecionar para a listagem de turmas -->
+                <a th:href="@{/turma}" class="btn btn-primary"> Listagem <i class="fas fa-list"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulário para cadastro de turmas -->
+        <form th:action="@{/turma/salvar}" th:object="${turma}" method="post">
+          <!-- Campo oculto para o ID da turma -->
+          <input type="hidden" th:field="*{id}">
+
+          <!-- Seção de Dados da Turma -->
+          <div class="card">
+            <div class="card-header">
+              Dados da Turma
+            </div>
+            <div class="card-body">
+              <!-- Campo para o nome do curso -->
+              <div class="row mb-12">
+                <label class="col-sm-12 col-form-label">Nome Curso:</label>
+                <div class="col-sm-12">
+                  <input class="form-control" type="text" th:field="*{nomeCurso}">
+                </div>
+                <div class="col-sm-12">
+                  <!-- Mensagem de erro para o campo nomeCurso -->
+                  <span class="mensagem" th:if="${#fields.hasErrors('nomeCurso')}" th:errors="*{nomeCurso}"></span>
+                </div>
+              </div>
+
+              <!-- Campo para a data de início do curso -->
+              <div class="row mb-12">
+                <label class="col-sm-12 col-form-label">Data Início:</label>
+                <div class="col-sm-12">
+                  <input class="form-control" type="date" th:field="*{dt_inicio}">
+                </div>
+                <div class="col-sm-12">
+                  <!-- Mensagem de erro para o campo dt_inicio -->
+                  <span class="mensagem" th:if="${#fields.hasErrors('dt_inicio')}" th:errors="*{dt_inicio}"></span>
+                </div>
+              </div>
+
+              <!-- Campo para a data de fim do curso -->
+              <div class="row mb-12">
+                <label class="col-sm-12 col-form-label">Data Fim:</label>
+                <div class="col-sm-12">
+                  <input class="form-control" type="date" th:field="*{dt_fim}">
+                </div>
+                <div class="col-sm-12">
+                  <!-- Mensagem de erro para o campo dt_fim -->
+                  <span class="mensagem" th:if="${#fields.hasErrors('dt_fim')}" th:errors="*{dt_fim}"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão para salvar o formulário -->
+          <br/>
+          <button class="btn btn-primary" type="submit"> Salvar <i class="fas fa-save"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fragmento de código que será substituído pelo conteúdo do fragmento "footer" -->
+  <div th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>
