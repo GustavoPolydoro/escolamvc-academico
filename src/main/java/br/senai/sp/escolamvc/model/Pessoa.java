@@ -70,6 +70,9 @@ public class Pessoa {
     private Date dataNascimento;
     private String senha;
 
+    @ManyToMany
+    private List<Turma> turmas = new ArrayList<Turma>();
+
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "pessoa_id")
@@ -79,4 +82,14 @@ public class Pessoa {
     public void addTelefone(Telefone telefone) {
         this.telefones.add(telefone);
     }
+
+
+    public void addTurma(Turma turma) {
+        this.turmas.add(turma);
+    }
+
+    public void removeTurma(Turma turma) {
+        this.turmas.remove(turma);
+    }
+
 }

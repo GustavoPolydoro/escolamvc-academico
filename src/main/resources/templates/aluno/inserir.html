@@ -316,15 +316,61 @@
                         </div>
 
                     </div>
+
+                    <br>
+
+                    <div class="card">
+                        <div class="card-header dynamic-update-rows-turma">
+                            Turmas
+
+                            <button type="button" name="addTurma"
+                                    class="btn btn-sm btn-success float-right"
+                                    data-dynamic-update-rows-url-turma="/aluno/addTurma">
+                                <i class="fas fa-plus"></i>
+                            </button>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <table class="table dynamic-update-rows-turma" style="width: 100%">
+                                <tbody id="dynamicTableContentsTurma">
+                                <tr th:fragment="turmas"
+                                    th:each="turma,rowStat : ${aluno.turmas}">
+                                    <td th:text="${rowStat.count}">1</td>
+                                    <td>
+
+                                        <!-- Dropdown de turmas  que funcione no javascript-->
+                                        <select class="form-control form-control-sm"
+                                                th:field="${aluno.turmas[__${rowStat.index}__].nomeCurso}"
+                                                th:onchange="atualizarIdTurma([[${rowStat.index}]],this)"
+                                        >
+                                            <option selected="selected" readonly value="">Selecione a turma</option>
+                                            <option th:each="turma : ${turmas}"
+                                                    th:value="${turma.id}"
+                                                    th:text="${turma.nomeCurso}"></option>
+                                        </select>
+                                        <input type="hidden" th:field="${aluno.turmas[__${rowStat.index}__].id}">
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" name="removeDynamicRowTurma"
+                                                    th:value="${rowStat.index}" class="btn btn-sm btn-danger"
+                                                    data-dynamic-update-rows-url-turma="/aluno/removeTurma">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
                     <br/>
 
-
-
-
-
-
-
-
+                    <br/>
 
                     <div class="row">
                         <div class="col-sm-6">
