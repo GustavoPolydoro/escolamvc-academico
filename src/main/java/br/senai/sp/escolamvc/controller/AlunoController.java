@@ -2,8 +2,10 @@ package br.senai.sp.escolamvc.controller;
 
 
 //imports
+
 import br.senai.sp.escolamvc.model.*;
 import br.senai.sp.escolamvc.repository.AlunoRepository;
+import br.senai.sp.escolamvc.repository.TurmaRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -25,10 +27,8 @@ public class AlunoController {
     //é do próprio framework
     @Autowired
     private AlunoRepository alunoRepository;
-
-
-
-
+    @Autowired
+    private TurmaRepository turmaRepository;
 
 
     /*
@@ -54,16 +54,19 @@ public class AlunoController {
             return "redirect:/aluno";
         }
         List<Aluno> listaAlunos = alunoRepository.findByNomeContainingIgnoreCase(nome);
-        model.addAttribute("alunos",listaAlunos);
+        model.addAttribute("alunos", listaAlunos);
         return "aluno/listagem";
     }
 
 
+// ce continua aqui
+
+
     /*
-    * Método de acesso à página http://localhost:8080/aluno/novo
-    */
+     * Método de acesso à página http://localhost:8080/aluno/novo
+     */
     @GetMapping("/novo")
-    public String cadastrar(Model model){
+    public String cadastrar(Model model) {
 
         // Adiciona um objeto aluno vazio para
         // ser carregado no formulário
@@ -73,9 +76,6 @@ public class AlunoController {
         // ser carregado no formulário
         model.addAttribute("endereco", new Endereco());
 
-        // Lista de turmas
-        //List<Turma> listaTurmas = turmaRepository.findAll();
-        //model.addAttribute("turmas", listaTurmas);
 
 
 
@@ -83,7 +83,7 @@ public class AlunoController {
         return "aluno/inserir";
     }
 
-   //metodo de salvar no bncd
+    //metodo de salvar no bncd
     @PostMapping("/salvar")
     public String salvarAluno(@Valid Aluno aluno, BindingResult result,
                               RedirectAttributes attributes) {
@@ -92,7 +92,6 @@ public class AlunoController {
         if (result.hasErrors()) {
             return "aluno/inserir";
         }
-
 
 
         // Salva o aluno no banco de dados
@@ -124,11 +123,6 @@ public class AlunoController {
     }
 
 
-
-
-
-
-
     /*
      * Método que direciona para templates/alunos/alterar.html
      */
@@ -141,16 +135,20 @@ public class AlunoController {
         // Adiciona o aluno no objeto model para ser carregado no formulário
         model.addAttribute("aluno", aluno);
 
-        // Retorna o template aluno/alterar.html
+
+        // Lista de turmas
+        List<Turma> listaTurmas = turmaRepository.findAll();
+        model.addAttribute("turmas", listaTurmas);
+
+        //Retorna o template aluno/alterar.html
         return "aluno/alterar";
     }
-
-
-
 
     /*
      * Método para excluir um aluno
      */
+
+
     @GetMapping("/excluir/{id}")
     public String excluir(@PathVariable("id") Long id,
                           RedirectAttributes attributes) {
@@ -183,6 +181,22 @@ public class AlunoController {
     public String removeTelefone(Aluno aluno, @RequestParam("removeDynamicRow") Integer telefoneIndex) {
         aluno.getTelefones().remove(telefoneIndex.intValue());
         return "aluno/inserir :: telefones";
+    }
+
+    @PostMapping("/addTurma")
+    public String addTurma(Aluno aluno, Model model) {
+        List<Turma> listaTurmas = turmaRepository.findAll();
+        model.addAttribute("turmas", listaTurmas);
+
+        aluno.addTurma(new Turma());
+        String turmas = "aluno/inserir :: turmas";
+        return "aluno/inserir :: turmas";
+    }
+
+    @PostMapping("/removeTurma")
+    public String removeTurma(Aluno aluno, @RequestParam("removeDynamicRow") Integer turmasIndex) {
+        aluno.getTurmas().remove(turmasIndex.intValue());
+        return "aluno/inserir :: turmas";
     }
 
 
